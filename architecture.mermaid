@@ -1,4 +1,3 @@
-```mermaid
 flowchart TB
     subgraph Browser["🌐 Browser Client"]
         MIC["🎤 Microphone<br>AudioWorklet 16kHz"]
@@ -52,7 +51,6 @@ flowchart TB
     T3 -->|"Transcript"| UI
     T4 -->|"[SYSTEM] nudge"| T2
     T5 -->|"Force finish"| REPORT
-```
     SM7 -->|"INTERVIEW_COMPLETE"| REPORT
     REPORT -->|"Markdown report"| UI
     REPORT <-->|"generate_content"| FLASH
