@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+venv/
+.venv/
+env/
+
+# Environment / secrets
+.env
+.env.local
+*.env
+config.local.py
+
+# API keys — never commit these
+*api_key*
+*secret*
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+#UV
+.python-version
+uv.lock
+pyproject.toml
+
+# Docker
+.dockerignore
+
+# ADK
+.adk
+# Test / temp
+*.tmp
+scratch/
