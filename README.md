@@ -108,8 +108,5 @@ gcloud run deploy ai-mock-interviewer \
 ```
 fastapi
 uvicorn
-google-genai
 google-adk
-websockets
-python-multipart
 ```
