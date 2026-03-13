@@ -1,0 +1,56 @@
+flowchart TB
+    subgraph Browser["🌐 Browser Client"]
+        MIC["🎤 Microphone<br>AudioWorklet 16kHz"]
+        SCREEN["🖥️ Screen Capture<br>JPEG frames / 5s"]
+        AUDIO_OUT["🔊 Audio Playback<br>AudioContext 24kHz"]
+        UI["UI<br>Transcript · Timer · Report"]
+    end
+
+    subgraph Server["⚙️ FastAPI Server (Python)"]
+        WS["WebSocket<br>/live-ws/{session_id}"]
+        
+        subgraph Tasks["5 Concurrent Async Tasks"]
+            T1["ws_receive_loop<br>VAD · Barge-in Detection"]
+            T2["send_loop<br>Audio · Video · stream_end"]
+            T3["recv_loop<br>Audio · Transcript · Tools"]
+            T4["stuck_nudge<br>45s · 90s hints"]
+            T5["timer_watchdog<br>Force wrap at limit"]
+        end
+
+        subgraph StateMachine["🔒 Tool State Machine"]
+            SM1["save_interview_context"]
+            SM2["log_behavioral_note"]
+            SM3["start_coding_phase"]
+            SM4["report_screen_state"]
+            SM5["log_technical_note"]
+            SM6["check_timer"]
+            SM7["end_interview"]
+            SM1-->SM2-->SM3-->SM4
+            SM3-->SM5
+            SM5-->SM6-->SM7
+        end
+
+        REPORT["📊 Report Generator<br>gemini-2.5-flash"]
+    end
+
+    subgraph Gemini["✨ Google Gemini APIs"]
+        LIVE["Gemini Live<br>gemini-2.5-flash-native-audio<br>Bidirectional Audio + Vision"]
+        FLASH["Gemini 2.5 Flash<br>Report Generation"]
+    end
+
+    MIC -->|"PCM audio chunks"| WS
+    SCREEN -->|"JPEG frames"| WS
+    WS --> T1
+    T1 -->|"VAD stream_end"| T2
+    T2 -->|"Audio + Video"| LIVE
+    LIVE -->|"Audio response"| T3
+    LIVE -->|"Tool calls"| T3
+    T3 -->|"Tool dispatch"| StateMachine
+    StateMachine -->|"Tool responses"| LIVE
+    T3 -->|"PCM audio"| AUDIO_OUT
+    T3 -->|"Transcript"| UI
+    T4 -->|"[SYSTEM] nudge"| T2
+    T5 -->|"Force finish"| REPORT
+    SM7 -->|"INTERVIEW_COMPLETE"| REPORT
+    REPORT -->|"Markdown report"| UI
+    REPORT <-->|"generate_content"| FLASH
