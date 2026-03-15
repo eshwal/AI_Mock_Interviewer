@@ -795,8 +795,9 @@ async def processor():
     return FileResponse(os.path.join(current_dir, "ai_interviewer/static/processor.js"))
 
 if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))
     uvicorn.run(
-        app, host="0.0.0.0", port=8000,
+        app, host="0.0.0.0", port=port,
         ws_ping_interval=20,
         ws_ping_timeout=60,
     )
