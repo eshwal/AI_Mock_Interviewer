@@ -42,11 +42,22 @@ cd ai-mock-interviewer
 
 # Install dependencies
 pip install -r requirements.txt
+```
 
-# Set your API key
+Set your API key:
+```bash
+# Mac/Linux
 export GOOGLE_API_KEY=your_api_key_here
 
-# Run
+# Windows CMD
+set GOOGLE_API_KEY=your_api_key_here
+
+# Windows PowerShell
+$env:GOOGLE_API_KEY="your_api_key_here"
+```
+
+Run:
+```bash
 python main.py
 ```
 
@@ -55,7 +66,14 @@ Open `http://localhost:8000` in Chrome. Allow microphone and screen sharing when
 ### Demo Mode (Short 5-min Interview)
 
 ```bash
-DEMO_MODE=true python main.py
+# Mac/Linux
+DEMO_MODE=1 python main.py
+
+# Windows CMD
+set DEMO_MODE=1 && python main.py
+
+# Windows PowerShell
+$env:DEMO_MODE="1"; python main.py
 ```
 
 ### Docker
@@ -68,13 +86,23 @@ docker run -p 8000:8080 -e GOOGLE_API_KEY=your_key ai-mock-interviewer
 ### Deploy to Google Cloud Run
 
 ```bash
+# Mac/Linux
+export GOOGLE_API_KEY=your_api_key_here
 gcloud run deploy ai-mock-interviewer \
   --source . \
   --region us-central1 \
   --allow-unauthenticated \
-  --set-env-vars GOOGLE_API_KEY=your_key_here \
+  --set-env-vars GOOGLE_API_KEY=$GOOGLE_API_KEY \
   --memory 1Gi \
   --timeout 3600
+
+# Windows CMD
+set GOOGLE_API_KEY=your_api_key_here
+gcloud run deploy ai-mock-interviewer --source . --region us-central1 --allow-unauthenticated --set-env-vars GOOGLE_API_KEY=%GOOGLE_API_KEY% --memory 1Gi --timeout 3600
+
+# Windows PowerShell
+$env:GOOGLE_API_KEY="your_api_key_here"
+gcloud run deploy ai-mock-interviewer --source . --region us-central1 --allow-unauthenticated --set-env-vars GOOGLE_API_KEY=$env:GOOGLE_API_KEY --memory 1Gi --timeout 3600
 ```
 
 ## Project Structure
